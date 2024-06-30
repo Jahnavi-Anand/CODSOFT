@@ -60,7 +60,7 @@ header nav ul li a:hover {
 }
 
 header nav ul li a .logout-icon {
-    color: #fff; /* Ensuring the icon color is white */
+    color: #fff; 
 }
 
 .container {
@@ -69,7 +69,7 @@ header nav ul li a .logout-icon {
     padding: 2em;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 5em; /* Adjust for header */
+    margin-top: 5em; 
 }
 
 h1 {
