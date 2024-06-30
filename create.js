@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalSubmitBtn = document.getElementById('final-submit-btn');
     const quizForm = document.getElementById('quiz-form');
     const summaryContainer = document.getElementById('summary-container');
-    const summaryForm = document.getElementById('summary-form');
     const totalQuestionsElement = document.getElementById('total-questions');
+    const quiz = document.getElementById('quiz');
 
     addQuestionBtn.addEventListener('click', addQuestion);
 
@@ -57,19 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        document.querySelectorAll('.question-item').forEach(item => {
-            const question = item.querySelector('input[name="question"]').value;
-            const options = [
-                item.querySelector('input[name="option1"]').value,
-                item.querySelector('input[name="option2"]').value,
-                item.querySelector('input[name="option3"]').value,
-                item.querySelector('input[name="option4"]').value,
-            ];
-            const correctOption = item.querySelector('input[name="correctOption"]').value;
-
-            // This can be stored in a global variable if needed for the final submit
-        });
-
+        quiz.style.display = 'none';
         quizForm.style.display = 'none';
         summaryContainer.style.display = 'block';
         totalQuestionsElement.textContent = `Total Quiz Questions: ${questions.length}`;

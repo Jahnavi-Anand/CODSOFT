@@ -50,8 +50,8 @@ input[type="number"] {
 }
 
 button {
-    background: #007bff;
-    color: #fff;
+    background: #ffffff;
+    color: #000000;
     padding: 0.5em 1em;
     border: none;
     border-radius: 5px;
@@ -60,7 +60,7 @@ button {
 }
 
 button:hover {
-    background: #0056b3;
+    background: #a8a8a8;
 }
 
 button[type="button"] {
