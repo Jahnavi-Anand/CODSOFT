@@ -47,7 +47,45 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
 
     if (!hasError) {
         alert('Signup successful!');
-        // Here you can add code to submit the form data to the server
+        const { connectToDatabase } = require('./db'); // Adjust path as necessary
+
+async function signup(username, email, password) {
+    const db = await connectToDatabase();
+    const usersCollection = db.collection('users');
+    const passwdCollection = db.collection('passwd');
+
+    // Hash the password (use bcrypt or another hashing library)
+    const hashedPassword = await hashPassword(password);
+
+    // Insert user data into 'users' collection
+    const userDoc = {
+        username,
+        email,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    };
+    await usersCollection.insertOne(userDoc);
+
+    // Insert password into 'passwd' collection
+    const passwordDoc = {
+        username,
+        password: hashedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    };
+    await passwdCollection.insertOne(passwordDoc);
+
+    console.log('User signed up successfully');
+}
+
+async function hashPassword(password) {
+    // Implement password hashing using bcrypt or your preferred library
+    // Example: return bcrypt.hash(password, 10);
+    return password; // For illustration, replace with actual hashing logic
+}
+
+module.exports = { signup };
+
     }
 });
 
