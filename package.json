@@ -1,0 +1,30 @@
+{
+  "name": "codsoft",
+  "version": "1.0.0",
+  "description": "quizzler",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jahnavi-Anand/CODSOFT.git"
+  },
+  "keywords": [
+    "quiz",
+    "platform",
+    "node.js",
+    "educational"
+  ],
+  "author": "Jahnavi Anand",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jahnavi-Anand/CODSOFT/issues"
+  },
+  "homepage": "https://github.com/Jahnavi-Anand/CODSOFT#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
