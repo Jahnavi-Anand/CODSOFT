@@ -25,7 +25,18 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
     if (!hasError) {
         try {
-            await login(username, password);
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
             alert('Login successful!');
             window.location.href = '/dashboard'; // Redirect to dashboard page after successful login
         } catch (error) {
@@ -34,44 +45,3 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         }
     }
 });
-
-async function login(username, password) {
-    try {
-        const db = await connectToDatabase();
-        const usersCollection = db.collection('users');
-        const passwdCollection = db.collection('passwd');
-
-        // Find user by username in 'users' collection
-        const user = await usersCollection.findOne({ username });
-
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        // Find hashed password by username in 'passwd' collection
-        const passwdDoc = await passwdCollection.findOne({ username });
-
-        if (!passwdDoc) {
-            throw new Error('Password document not found');
-        }
-
-        // Verify password (compare hashed password)
-        const isPasswordValid = await verifyPassword(password, passwdDoc.password);
-
-        if (!isPasswordValid) {
-            throw new Error('Invalid password');
-        }
-
-        console.log('User logged in successfully');
-        return user;
-    } catch (error) {
-        console.error('Error logging in:', error);
-        throw error; // Propagate the error for better error handling at the login form level
-    }
-}
-
-async function verifyPassword(password, hashedPassword) {
-    // Implement password verification using bcrypt or your preferred library
-    // Example: return bcrypt.compare(password, hashedPassword);
-    return password === hashedPassword; // For illustration, replace with actual verification logic
-}

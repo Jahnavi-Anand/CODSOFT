@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt'); // For hashing passwords
+const bcrypt = require('bcrypt');
 const app = express();
 
 // Connect to MongoDB Atlas
@@ -32,7 +32,7 @@ const Password = mongoose.model('Password', {
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
-// Route to serve static files (CSS, JS, etc.)
+// Serve static files (HTML, CSS, JS)
 app.use(express.static('public'));
 
 // Route to render signup page
@@ -73,10 +73,10 @@ app.post("/signup", async (req, res) => {
         });
         await newPassword.save();
 
-        res.status(201).send('Signup successful'); // Respond with success
+        res.status(201).send('Signup successful');
     } catch (error) {
         console.error('Error signing up:', error);
-        res.status(500).send('Internal Server Error'); // Respond with error
+        res.status(500).send('Internal Server Error');
     }
 });
 
@@ -110,13 +110,23 @@ app.post("/login", async (req, res) => {
         res.redirect('/dashboard'); // Redirect to dashboard after successful login
     } catch (error) {
         console.error('Error logging in:', error);
-        res.status(500).send('Internal Server Error'); // Respond with error
+        res.status(500).send('Internal Server Error');
     }
 });
 
 // Route to handle dashboard page
 app.get("/dashboard", (req, res) => {
     res.sendFile(__dirname + '/public/dashboard.html');
+});
+
+// Route to handle logout
+app.get('/logout', (req, res) => {
+    // Here you can clear session data or invalidate tokens as needed
+    // Example with cookies:
+    res.clearCookie('authToken'); // Replace 'authToken' with your actual cookie name
+
+    // Redirect to login page or any other page after logout
+    res.redirect('/login');
 });
 
 // Start the server
