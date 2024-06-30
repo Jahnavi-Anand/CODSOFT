@@ -64,12 +64,13 @@ header nav ul li a .logout-icon {
 }
 
 .container {
-    background: #ffffff8c;
+    background: rgba(255, 255, 255, 0.8);
     padding: 2em;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
+    margin-top: 5em; 
 }
 
 h1 {

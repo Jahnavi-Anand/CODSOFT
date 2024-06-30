@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+    <title>Login</title>
     <link rel="stylesheet" href="signup.css">
     <script src="https://kit.fontawesome.com/4c5acf577d.js" crossorigin="anonymous"></script>
 </head>
@@ -25,31 +25,21 @@
     </header>
 
     <div class="container">
-        <h1>SIGNUP</h1>
-        <form id="signupForm">
+        <h1>LOGIN</h1>
+        <form id="loginForm">
             <div class="form-group">
                 <label for="username">USERNAME:</label>
                 <input type="text" id="username" name="username" required>
                 <span class="error" id="usernameError"></span>
             </div>
             <div class="form-group">
-                <label for="email">EMAIL:</label>
-                <input type="email" id="email" name="email" required>
-                <span class="error" id="emailError"></span>
-            </div>
-            <div class="form-group">
                 <label for="password">PASSWORD:</label>
                 <input type="password" id="password" name="password" required>
                 <span class="error" id="passwordError"></span>
             </div>
-            <div class="form-group">
-                <label for="confirmPassword">CONFIRM PASSWORD:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
-                <span class="error" id="confirmPasswordError"></span>
-            </div>
-            <button type="submit">Signup</button>
+            <button type="submit">Login</button>
         </form>
     </div>
-    <script src="signup.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>
