@@ -1,4 +1,4 @@
-document.getElementById('signupForm').addEventListener('submit', function(event) {
+document.getElementById('signupForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     
     let hasError = false;
@@ -46,48 +46,36 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
     }
 
     if (!hasError) {
-        alert('Signup successful!');
-        const { connectToDatabase } = require('./db'); // Adjust path as necessary
-
-async function signup(username, email, password) {
-    const db = await connectToDatabase();
-    const usersCollection = db.collection('users');
-    const passwdCollection = db.collection('passwd');
-
-    // Hash the password (use bcrypt or another hashing library)
-    const hashedPassword = await hashPassword(password);
-
-    // Insert user data into 'users' collection
-    const userDoc = {
-        username,
-        email,
-        createdAt: new Date(),
-        updatedAt: new Date()
-    };
-    await usersCollection.insertOne(userDoc);
-
-    // Insert password into 'passwd' collection
-    const passwordDoc = {
-        username,
-        password: hashedPassword,
-        createdAt: new Date(),
-        updatedAt: new Date()
-    };
-    await passwdCollection.insertOne(passwordDoc);
-
-    console.log('User signed up successfully');
-}
-
-async function hashPassword(password) {
-    // Implement password hashing using bcrypt or your preferred library
-    // Example: return bcrypt.hash(password, 10);
-    return password; // For illustration, replace with actual hashing logic
-}
-
-module.exports = { signup };
-
+        // Call the signup function
+        try {
+            await signup(username, email, password);
+            alert('Signup successful! Redirecting to login page.');
+            window.location.href = '/login.html'; // Redirect to login page after successful signup
+        } catch (error) {
+            console.error('Error signing up:', error);
+            alert('Error signing up. Please try again later.');
+        }
     }
 });
+
+async function signup(username, email, password) {
+    try {
+        const response = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to sign up');
+        }
+    } catch (error) {
+        console.error('Error signing up:', error);
+        throw error; // Propagate the error for better error handling at the signup form level
+    }
+}
 
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
