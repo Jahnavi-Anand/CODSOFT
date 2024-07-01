@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://kit.fontawesome.com/4c5acf577d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">QUIZZLER</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="#" id="logoutButton"><i class="fa-solid fa-power-off"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="sidebar">
+        <div class="user-info">
+            <h2>User Information</h2>
+            <p id="user-name"></p>
+            <p id="user-email"></p>
+            <button onclick="showEditPasswordForm()">Edit Password</button>
+            
+            <div id="edit-password-form" style="display: none;">
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password:</label>
+                        <input type="password" id="currentPassword" name="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password:</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <button type="submit">Update Password</button>
+                </form>
+            </div>
+        </div>
+        
+        <h2>Customize Dashboard</h2>
+        <form id="dashboardForm">
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="institution">Institution:</label>
+                <input type="text" id="institution" name="institution">
+            </div>
+            <div class="form-group">
+                <label for="education">Level of Education:</label>
+                <input type="text" id="education" name="education">
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state">
+            </div>
+            <div class="form-group">
+                <label for="contactInfo">Contact info:</label>
+                <input type="text" id="contactInfo" name="contactInfo">
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    <div class="main-content">
+        <div class="quizzes-container">
+            <div class="quizzes-taken">
+                <h2>Quizzes Taken</h2>
+                <div class="quiz-tile" id="quizzesTakenContainer">
+                    <h3></h3>
+                    <p></p>
+                    <p></p>
+                </div>
+                <!-- More quiz tiles can be dynamically added -->
+            </div>
+            <div class="quizzes-created">
+                <h2>Quizzes Created</h2>
+                <div class="quiz-tile" id="quizzesCreatedContainer">
+                    <h3></h3>
+                    <p></p>
+                    <p></p>
+                </div>
+                <!-- More quiz tiles can be dynamically added -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userInfo = JSON.parse(document.getElementById('user-data').textContent);
+        
+        document.getElementById('user-name').textContent = userInfo.username;
+        document.getElementById('user-email').textContent = userInfo.email;
+
+        // Populate other user information fields
+        if (userInfo.bio) document.getElementById('bio').value = userInfo.bio;
+        if (userInfo.institution) document.getElementById('institution').value = userInfo.institution;
+        if (userInfo.levelOfEducation) document.getElementById('education').value = userInfo.levelOfEducation;
+        if (userInfo.city) document.getElementById('city').value = userInfo.city;
+        if (userInfo.state) document.getElementById('state').value = userInfo.state;
+        if (userInfo.contactInfo) document.getElementById('contactInfo').value = userInfo.contactInfo;
+    });
+</script>
+
+</body>
+</html>
