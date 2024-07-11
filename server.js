@@ -304,7 +304,11 @@ app.post("/update-bio", async (req, res) => {
 app.post('/create-quiz', async (req, res) => {
     try {
         const { name, subject, questions, totalMarks, timer } = req.body;
-        const createdBy = req.session.userId; // Assuming userId is stored in session after login
+        const createdBy = req.session.userId; // Ensure this session variable is correctly set during login
+
+        if (!createdBy) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
 
         const newQuiz = new Quiz({
             name,
@@ -322,6 +326,7 @@ app.post('/create-quiz', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 // Route to fetch all quizzes
 app.get('/quizzes', async (req, res) => {

@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const result = await response.json();
+                console.log('Quiz creation response:', result);
                 alert('Quiz created successfully!');
                 // Reset the forms and show a success message or redirect
                 quizForm.reset();
@@ -114,6 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 quizForm.style.display = 'block';
                 summaryContainer.style.display = 'none';
             } else {
+                const errorResult = await response.json();
+                console.error('Failed to create quiz:', errorResult);
                 alert('Failed to create quiz');
             }
         } catch (error) {
