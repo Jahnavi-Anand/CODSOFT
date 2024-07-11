@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const quizTile = document.getElementById('quiz-tile');
     const takeQuizBtn = document.getElementById('take-quiz-btn');
     const quizQuestionsContainer = document.getElementById('quiz-questions');
     const quizSummaryContainer = document.getElementById('quiz-summary');
     const quizSummaryTable = document.getElementById('quiz-summary-table');
+    const quizTile = document.getElementById('quiz-tile');
+    let currentQuestionIndex = 0;
+    let correctAnswers = 0;
+    let incorrectAnswers = 0;
+    let quizQuestions = [];
 
     takeQuizBtn.addEventListener('click', () => {
         quizTile.style.display = 'none';
@@ -13,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadQuizQuestions() {
         try {
             // Simulate fetching quiz questions (since backend is not connected)
-            const quizQuestions = [
+            quizQuestions = [
                 {
                     question: "Who sang the title song for the latest Bond film, No Time to Die?",
                     options: ["Adele", "Sam Smith", "Billie Eilish"],
@@ -41,75 +45,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ];
 
-            // Display questions one by one
-            quizQuestions.forEach((quizQuestion, index) => {
-                setTimeout(() => {
-                    displayQuizQuestion(quizQuestion, index + 1, quizQuestions.length);
-                }, index * 2000); // Adjust timing as needed
-            });
-
-            // Show quiz summary after all questions are answered
-            setTimeout(() => {
-                showQuizSummary(quizQuestions);
-            }, quizQuestions.length * 2000 + 2000); // Wait for all questions to be answered + additional time
+            displayQuizQuestion();
         } catch (error) {
             console.error('Error loading quiz questions:', error);
         }
     }
 
-    function displayQuizQuestion(questionData, currentQuestionNumber, totalQuestions) {
-        const { question, options } = questionData;
+    function displayQuizQuestion() {
+        const currentQuestion = quizQuestions[currentQuestionIndex];
 
         const questionElement = document.createElement('div');
         questionElement.classList.add('question-item');
         questionElement.innerHTML = `
-            <h3>Question ${currentQuestionNumber}/${totalQuestions}</h3>
-            <p>${question}</p>
+            <h3>Question ${currentQuestionIndex + 1}/${quizQuestions.length}</h3>
+            <p>${currentQuestion.question}</p>
             <ul>
-                ${options.map(option => `<li>${option}</li>`).join('')}
+                ${currentQuestion.options.map((option, index) => `
+                    <li>
+                        <input type="radio" id="option${index}" name="options" value="${option}">
+                        <label for="option${index}">${option}</label>
+                    </li>
+                `).join('')}
             </ul>
+            <button id="next-btn">Next</button>
         `;
 
+        quizQuestionsContainer.innerHTML = '';
         quizQuestionsContainer.appendChild(questionElement);
+
+        const nextBtn = document.getElementById('next-btn');
+        nextBtn.addEventListener('click', () => {
+            const selectedOption = document.querySelector('input[name="options"]:checked');
+            if (selectedOption) {
+                const selectedValue = selectedOption.value;
+                if (selectedValue === currentQuestion.correctOption) {
+                    correctAnswers++;
+                } else {
+                    incorrectAnswers++;
+                }
+
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizQuestions.length) {
+                    displayQuizQuestion();
+                } else {
+                    showQuizSummary();
+                }
+            } else {
+                alert('Please select an option.');
+            }
+        });
     }
 
-    function showQuizSummary(quizQuestions) {
+    function showQuizSummary() {
         quizQuestionsContainer.style.display = 'none';
         quizSummaryContainer.style.display = 'block';
 
-        // Calculate quiz results (since backend is not connected, simulate)
-        const quizSummary = calculateQuizSummary(quizQuestions);
-
-        // Display quiz summary in a table
-        const tableRows = quizSummary.map(summary => {
-            return `<tr>
-                        <td>${summary.question}</td>
-                        <td>${summary.answered}</td>
-                        <td>${summary.correct ? 'Correct' : 'Wrong'}</td>
-                    </tr>`;
-        }).join('');
-
-        quizSummaryTable.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Question</th>
-                    <th>Answered</th>
-                    <th>Result</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${tableRows}
-            </tbody>
+        quizSummaryContainer.innerHTML = `
+            <div class="summary-container">
+                <h2>Quiz Summary</h2>
+                <div class="summary-content">
+                    <p>Total Questions: ${quizQuestions.length}</p>
+                    <p>Correct Answers: ${correctAnswers}</p>
+                    <p>Incorrect Answers: ${incorrectAnswers}</p>
+                </div>
+            </div>
         `;
-    }
-
-    function calculateQuizSummary(quizQuestions) {
-        return quizQuestions.map(question => {
-            return {
-                question: question.question,
-                answered: question.selectedOption ? question.selectedOption : 'Not answered',
-                correct: question.selectedOption === question.correctOption
-            };
-        });
     }
 });
