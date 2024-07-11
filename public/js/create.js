@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalQuestionsElement.textContent = `Total Quiz Questions: ${questions.length}`;
     });
 
-    finalSubmitBtn.addEventListener('click', () => {
+    finalSubmitBtn.addEventListener('click', async () => {
         const quizName = document.getElementById('quiz-name').value;
         const quizSubject = document.getElementById('quiz-subject').value;
         const totalMarks = document.getElementById('total-marks').value;
@@ -74,22 +74,51 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const questions = [];
+        document.querySelectorAll('.question-item').forEach(item => {
+            const question = item.querySelector('input[name="question"]').value;
+            const options = [
+                item.querySelector('input[name="option1"]').value,
+                item.querySelector('input[name="option2"]').value,
+                item.querySelector('input[name="option3"]').value,
+                item.querySelector('input[name="option4"]').value
+            ];
+            const correctOption = item.querySelector('input[name="correctOption"]').value;
+
+            questions.push({ question, options, correctOption });
+        });
+
         const quizDetails = {
             name: quizName,
             subject: quizSubject,
-            totalQuestions: document.querySelectorAll('.question-item').length,
+            questions: questions,
             totalMarks: totalMarks,
-            timer: quizTimer ? quizTimer : null,
+            timer: quizTimer ? quizTimer : null
         };
 
-        console.log('Quiz created:', quizDetails);
-        // Here you can handle the final form submission, e.g., send the data to a server
+        try {
+            const response = await fetch('/create-quiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(quizDetails)
+            });
 
-        // Reset the forms and show a success message or redirect
-        quizForm.reset();
-        summaryForm.reset();
-        quizForm.style.display = 'block';
-        summaryContainer.style.display = 'none';
-        alert('Quiz created successfully!');
+            if (response.ok) {
+                const result = await response.json();
+                alert('Quiz created successfully!');
+                // Reset the forms and show a success message or redirect
+                quizForm.reset();
+                document.getElementById('summary-form').reset();
+                quizForm.style.display = 'block';
+                summaryContainer.style.display = 'none';
+            } else {
+                alert('Failed to create quiz');
+            }
+        } catch (error) {
+            console.error('Error creating quiz:', error);
+            alert('Failed to create quiz');
+        }
     });
 });

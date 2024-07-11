@@ -323,6 +323,32 @@ app.post('/create-quiz', async (req, res) => {
     }
 });
 
+// Route to fetch all quizzes
+app.get('/quizzes', async (req, res) => {
+    try {
+        const quizzes = await Quiz.find().populate('createdBy', 'username');
+        res.status(200).json(quizzes);
+    } catch (error) {
+        console.error('Error fetching quizzes:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// Route to fetch a specific quiz by ID
+app.get('/quiz/:id', async (req, res) => {
+    try {
+        const quizId = req.params.id;
+        const quiz = await Quiz.findById(quizId).populate('createdBy', 'username');
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz not found' });
+        }
+        res.status(200).json(quiz);
+    } catch (error) {
+        console.error('Error fetching quiz:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
