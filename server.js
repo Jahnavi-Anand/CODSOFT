@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const app = express();
+const Quiz = require('./public/js/quiz');
+
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://devops:devops@cluster0.5298ya3.mongodb.net/quizzler?retryWrites=true&w=majority', {
@@ -43,9 +45,17 @@ const Password = mongoose.model('Password', {
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
-const Dashboard = mongoose.model('dashboard', {
+const Dashboard = mongoose.model('Dashboard', {
     username: String,
     email: String,
+    createdAt: Date,
+    updatedAt: Date,
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+
+// Bio model
+const Bio = mongoose.model('Bio', {
+    email: { type: String, unique: true },
     bio: String,
     institution: String,
     educationLevel: String,
@@ -106,12 +116,22 @@ app.post("/signup", async (req, res) => {
         });
         await newDashboard.save();
 
+        // Save initial bio data
+        const newBio = new Bio({
+            email,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            user: newUser._id
+        });
+        await newBio.save();
+
         res.status(201).send('Signup successful');
     } catch (error) {
         console.error('Error signing up:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 // Route to handle login form submission
 app.post("/login", async (req, res) => {
@@ -247,6 +267,58 @@ app.post('/update-password', async (req, res) => {
         res.json({ message: 'Password updated successfully' });
     } catch (error) {
         console.error('Error updating password:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// Route to update user bio data
+app.post("/update-bio", async (req, res) => {
+    try {
+        const { email, bio, institution, educationLevel, city, state, contactInfo } = req.body;
+
+        // Find the bio document based on email
+        const bioDoc = await Bio.findOne({ email });
+        if (!bioDoc) {
+            return res.status(404).send('Bio data not found');
+        }
+
+        // Update the bio document
+        bioDoc.bio = bio;
+        bioDoc.institution = institution;
+        bioDoc.educationLevel = educationLevel;
+        bioDoc.city = city;
+        bioDoc.state = state;
+        bioDoc.contactInfo = contactInfo;
+        bioDoc.updatedAt = new Date();
+
+        await bioDoc.save();
+
+        res.status(200).json({ message: 'Bio updated successfully' });
+    } catch (error) {
+        console.error('Error updating bio data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Route to save a new quiz
+app.post('/create-quiz', async (req, res) => {
+    try {
+        const { name, subject, questions, totalMarks, timer } = req.body;
+        const createdBy = req.session.userId; // Assuming userId is stored in session after login
+
+        const newQuiz = new Quiz({
+            name,
+            subject,
+            questions,
+            totalMarks,
+            timer,
+            createdBy
+        });
+
+        await newQuiz.save();
+        res.status(201).json({ message: 'Quiz created successfully', quiz: newQuiz });
+    } catch (error) {
+        console.error('Error creating quiz:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });

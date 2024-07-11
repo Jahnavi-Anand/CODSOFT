@@ -20,40 +20,43 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Handle form submission
-    document.getElementById('dashboardForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const bio = document.getElementById('bio').value;
-        const institution = document.getElementById('institution').value;
-        const educationLevel = document.getElementById('educationLevel').value;
-        const city = document.getElementById('city').value;
-        const state = document.getElementById('state').value;
-        const contactInfo = document.getElementById('contactInfo').value;
+   // Handle form submission
+document.getElementById('dashboardForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const bio = document.getElementById('bio').value;
+    const institution = document.getElementById('institution').value;
+    const educationLevel = document.getElementById('educationLevel').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const contactInfo = document.getElementById('contactInfo').value;
 
-        const updatedDashboard = {
-            bio,
-            institution,
-            educationLevel,
-            city,
-            state,
-            contactInfo
-        };
+    const updatedData = {
+        bio,
+        institution,
+        educationLevel,
+        city,
+        state,
+        contactInfo
+    };
 
-        try {
-            const response = await fetch('/update-dashboard', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedDashboard)
-            });
+    try {
+        const response = await fetch('/update-dashboard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
 
-            if (response.ok) {
-                alert('Dashboard updated successfully.');
-            } else {
-                alert('Error updating dashboard. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error updating dashboard data:', error);
+        if (response.ok) {
+            alert('Dashboard updated successfully.');
+        } else {
+            alert('Error updating dashboard. Please try again.');
         }
-    });
+    } catch (error) {
+        console.error('Error updating dashboard:', error);
+        alert('Failed to update dashboard. Please try again.');
+    }
+});
+
 });
