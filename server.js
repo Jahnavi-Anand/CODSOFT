@@ -29,6 +29,7 @@ app.use(session({
 // Serve static files (HTML, CSS, JS)
 app.use(express.static('public'));
 
+
 // Mongoose Models
 const User = mongoose.model('User', {
     username: String,
@@ -65,6 +66,14 @@ const Bio = mongoose.model('Bio', {
     createdAt: Date,
     updatedAt: Date,
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+
+const response = await fetch('/create-quiz', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(quizDetails)
 });
 
 
@@ -221,7 +230,6 @@ app.get("/dashboard-data", async (req, res) => {
 });
 
 // Route to update user dashboard data
-// Route to update user dashboard data
 app.post("/update-dashboard", async (req, res) => {
     try {
         const { username, bio, institution, educationLevel, city, state, contactInfo } = req.body;
@@ -304,7 +312,7 @@ app.post("/update-bio", async (req, res) => {
 app.post('/create-quiz', async (req, res) => {
     try {
         const { name, subject, questions, totalMarks, timer } = req.body;
-        const createdBy = req.session.userId; // Ensure this session variable is correctly set during login
+        const createdBy = req.session.username; // Ensure this session variable is correctly set during login
 
         if (!createdBy) {
             return res.status(401).json({ message: 'User not authenticated' });
@@ -326,6 +334,7 @@ app.post('/create-quiz', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 
 // Route to fetch all quizzes
@@ -353,6 +362,9 @@ app.get('/quiz/:id', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
+
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

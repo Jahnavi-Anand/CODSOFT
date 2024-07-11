@@ -97,7 +97,7 @@ header nav ul li a .logout-icon {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 250px;
     padding: 20px;
-    text-align: center;
+    text-align: left; /* Align quiz tile to the left */
     transition: transform 0.3s;
 }
 
@@ -128,4 +128,69 @@ header nav ul li a .logout-icon {
 
 .take-quiz-btn:hover {
     background: #218838;
+}
+
+/* Style for quiz questions */
+.question-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Adjust width as needed */
+    margin: 20px auto;
+    padding: 20px;
+    text-align: left;
+}
+
+.question-item h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+}
+
+.question-item p {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    color: #333;
+}
+
+.question-item ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.question-item ul li {
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+/* Quiz summary table */
+#quiz-summary {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Adjust width as needed */
+    margin: 20px auto;
+    padding: 20px;
+    text-align: left;
+    display: none; /* Initially hidden */
+}
+
+#quiz-summary h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+}
+
+#quiz-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#quiz-summary-table th,
+#quiz-summary-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+#quiz-summary-table th {
+    background-color: #f2f2f2;
 }

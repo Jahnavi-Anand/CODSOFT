@@ -68,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const quizSubject = document.getElementById('quiz-subject').value;
         const totalMarks = document.getElementById('total-marks').value;
         const quizTimer = document.getElementById('quiz-timer').value;
-
+    
         if (!quizName || !quizSubject || !totalMarks) {
             alert('Please fill in all required fields.');
             return;
         }
-
+    
         const questions = [];
         document.querySelectorAll('.question-item').forEach(item => {
             const question = item.querySelector('input[name="question"]').value;
@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.querySelector('input[name="option4"]').value
             ];
             const correctOption = item.querySelector('input[name="correctOption"]').value;
-
+    
             questions.push({ question, options, correctOption });
         });
-
+    
         const quizDetails = {
             name: quizName,
             subject: quizSubject,
@@ -95,7 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
             totalMarks: totalMarks,
             timer: quizTimer ? quizTimer : null
         };
-
+    
+        console.log('Sending quiz details:', quizDetails);
+    
         try {
             const response = await fetch('/create-quiz', {
                 method: 'POST',
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(quizDetails)
             });
-
+    
             if (response.ok) {
                 const result = await response.json();
                 console.log('Quiz creation response:', result);
@@ -124,4 +126,5 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Failed to create quiz');
         }
     });
+    
 });

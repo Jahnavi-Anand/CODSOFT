@@ -23,12 +23,22 @@
     </header>
 
     <div class="container">
-        <div class="search-container">
-            <input type="text" id="searchBar" placeholder="Search quizzes...">
+        <div class="quiz-tile" id="quiz-tile">
+            <h2>General Knowledge Quiz</h2>
+            <p>Number of Questions: 5</p>
+            <p>Author: Quizzler Team</p>
+            <button id="take-quiz-btn">Take Quiz</button>
         </div>
-        <div id="quiz-list">
-            <h1 style="color: white;">Available Quizzes</h1>
-            <!-- Display quizzes dynamically here -->
+        
+        <div id="quiz-questions" style="display: none;">
+            <!-- Quiz questions will be dynamically loaded here -->
+        </div>
+
+        <div id="quiz-summary" style="display: none;">
+            <h2>Quiz Summary</h2>
+            <table id="quiz-summary-table">
+                <!-- Quiz summary table will be populated dynamically -->
+            </table>
         </div>
     </div>
 
